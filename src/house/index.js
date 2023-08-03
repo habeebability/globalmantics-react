@@ -2,6 +2,7 @@ import "./house.css";
 import { useState } from "react";
 import emailIcon from "./Email.png";
 import Inquiry from "./Inquiry";
+import PropTypes from "prop-types";
 
 const House = ({ house }) => {
   const [inquiryShown, setInquiryShown] = useState(false);
@@ -35,6 +36,11 @@ const House = ({ house }) => {
       </div>
     </div>
   );
+};
+
+// to enhance warning when we forget to pass house object
+House.propTypes = {
+  house: PropTypes.object.isRequired,
 };
 
 export default House;
