@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 const Inquiry = () => {
   const [contactInfo, setContactInfo] = useState({
@@ -7,7 +7,13 @@ const Inquiry = () => {
     remarks: "",
   });
 
+  //   testing useRef
+  const counterRef = useRef(0);
+  const inputRef = useRef(null);
+
   const onChange = (e) => {
+    counterRef.current++;
+    // inputRef.current.value = "something" + counterRef.current;
     setContactInfo({ ...contactInfo, [e.target.id]: e.target.value });
   };
 
@@ -21,6 +27,7 @@ const Inquiry = () => {
       <div className="form-group">
         <label htmlFor="name">Name</label>
         <input
+          ref={inputRef}
           type="text"
           className="form-control"
           placeholder="Name"

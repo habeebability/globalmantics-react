@@ -1,38 +1,66 @@
-import { useEffect, useState, useMemo } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+// import useCallback if we use ---> another way to fetch data
+
+import useFeaturedHouse from "../hooks/useFeaturedHouse";
+import useHouses from "../hooks/useHouses";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./main-page.css";
 
-import Header from "./header";
-import FeaturedHouse from "./featured-house";
-import SearchResults from "../search-results";
-import HouseFilter from "./house-filter";
 import HouseFromQuery from "../house/house-from-query";
+import SearchResults from "../search-results";
+import FeaturedHouse from "./featured-house";
+import Header from "./header";
+import HouseFilter from "./house-filter";
 function App() {
-  const [housesData, setHouses] = useState([]);
+  const housesData = useHouses();
+  const featuredHouse = useFeaturedHouse(housesData);
+  //#region
+  // this code will be moved to custom hook
 
-  useEffect(() => {
-    const fetchHouses = async () => {
-      const response = await fetch("/houses.json");
-      const houses = await response.json();
+  // const [housesData, setHouses] = useState([]);
 
-      setHouses(houses);
-    };
+  // one way to fetch data
+  // useEffect(() => {
+  //   const fetchHouses = async () => {
+  //     const response = await fetch("/houses.json");
+  //     const houses = await response.json();
 
-    fetchHouses();
-  }, []);
+  //     setHouses(houses);
+  //   };
 
-  const featuredHouse = useMemo(() => {
-    if (housesData.length) {
-      const randomIndex = Math.floor(Math.random() * housesData.length);
+  //   fetchHouses();
+  // }, []);
 
-      return housesData[randomIndex];
-    }
-  }, [housesData]);
+  //#endregion
+
+  // another way to fetch data
+  // const fetchHouses = useCallback(async () => {
+  //   const response = await fetch("/houses.json");
+  //   const houses = await response.json();
+
+  //   setHouses(houses);
+  // }, []);
+  // useEffect(() => {
+  //   fetchHouses();
+
+  //   // we must include fetchHouses in the dependency array
+  // }, [fetchHouses]);
+
+  // create a custom hook for featured house
+  // const featuredHouse = useMemo(() => {
+  //   if (housesData.length) {
+  //     const randomIndex = Math.floor(Math.random() * housesData.length);
+
+  //     return housesData[randomIndex];
+  //   }
+  // }, [housesData]);
+
+  const header = <Header subtitle="Providing houses all over the world" />;
 
   return (
     <Router>
       <div className="container">
-        <Header subtitle="Providing houses all over the world" />
+        {header}
+        {/* <Header subtitle="Providing houses all over the world" /> */}
         <HouseFilter allHouses={housesData} />
         <Routes>
           <Route
