@@ -10,6 +10,8 @@ import SearchResults from "../search-results";
 import FeaturedHouse from "./featured-house";
 import Header from "./header";
 import HouseFilter from "./house-filter";
+
+import HousesContext from "../context/housesContext";
 function App() {
   const housesData = useHouses();
   const featuredHouse = useFeaturedHouse(housesData);
@@ -58,27 +60,23 @@ function App() {
 
   return (
     <Router>
-      <div className="container">
-        {header}
-        {/* <Header subtitle="Providing houses all over the world" /> */}
-        <HouseFilter allHouses={housesData} />
-        <Routes>
-          <Route
-            path="/"
-            exact
-            element={<FeaturedHouse house={featuredHouse} />}
-          />
-          <Route
-            path="/searchresults/:country"
-            element={<SearchResults allHouses={housesData} />}
-          />
-          <Route
-            path={"/house/:id"}
-            element={<HouseFromQuery allHouses={housesData} />}
-          />
-          {/* <Route path="*" element={<h2>Not Found</h2>} /> */}
-        </Routes>
-      </div>
+      <HousesContext.Provider value={housesData}>
+        <div className="container">
+          {header}
+          {/* <Header subtitle="Providing houses all over the world" /> */}
+          <HouseFilter />
+          <Routes>
+            <Route
+              path="/"
+              exact
+              element={<FeaturedHouse house={featuredHouse} />}
+            />
+            <Route path="/searchresults/:country" element={<SearchResults />} />
+            <Route path={"/house/:id"} element={<HouseFromQuery />} />
+            {/* <Route path="*" element={<h2>Not Found</h2>} /> */}
+          </Routes>
+        </div>
+      </HousesContext.Provider>
     </Router>
   );
 }
